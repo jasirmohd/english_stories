@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "990718124359",
+    "project_id": "english-stories-8a084",
+    "storage_bucket": "english-stories-8a084.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:990718124359:android:55671f383a243543f66c62",
+        "android_client_info": {
+          "package_name": "com.muhammedjasir.english_stories"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBnqrwJC5NwfBdP7__0b8OI-fP7Lyuwec0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
