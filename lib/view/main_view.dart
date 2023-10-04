@@ -1,11 +1,12 @@
-import 'package:english_stories/resources/app_colors.dart';
-import 'package:english_stories/resources/app_strings.dart';
-import 'package:english_stories/view/dictionary_view.dart';
-import 'package:english_stories/view/home_view.dart';
-import 'package:english_stories/view/video_list_view.dart';
-import 'package:english_stories/widgets/common_text_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
+import '../resources/app_colors.dart';
+import '../resources/app_strings.dart';
+import '../view/dictionary_view.dart';
+import '../view/home_view.dart';
+import '../view/video_list_view.dart';
+import '../widgets/common_text_widget.dart';
 
 import '../controller/main_controller.dart';
 
@@ -44,9 +45,11 @@ class _MainViewState extends State<MainView>{
         child: Column(
           children: [
             Expanded(
-                flex: 1,
-                child: SizedBox(
+                flex: 0,
+                child: Container(
+                  height: 150,
                   width: Get.width,
+                  color: Colors.black,
                 )),
             _sideDrawerItemWidget(context, AppStrings.oneDayStory),
             _sideDrawerItemWidget(context, AppStrings.favourites),
@@ -60,29 +63,29 @@ class _MainViewState extends State<MainView>{
             _sideDrawerItemWidget(context, AppStrings.rating),
             _sideDrawerItemWidget(context, AppStrings.about),
             _sideDrawerItemWidget(context, AppStrings.share),
-            Expanded(
-                flex: 0,
-                child: SizedBox(
-                  width: Get.width,
-                  child: Align(
-                    alignment: Alignment.centerRight,
-                    child: InkWell(
-                      onTap: () => controller.scaffoldState.currentState?.openEndDrawer(),
-                      radius: 45.0,
-                      borderRadius: BorderRadius.circular(45.0),
-                      child: Card(
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(45.0),
-                          ),
-                          child: const Icon(
-                            Icons.navigate_before_rounded,
-                            color: AppColors.black,
-                            weight: 50,
-                            size: 35,
-                          )),
-                    ),
-                  ),
-                )),
+            // Expanded(
+            //     flex: 1,
+            //     child: SizedBox(
+            //       width: Get.width,
+            //       child: Align(
+            //         alignment: Alignment.bottomRight,
+            //         child: InkWell(
+            //           onTap: () => controller.scaffoldState.currentState?.openEndDrawer(),
+            //           radius: 45.0,
+            //           borderRadius: BorderRadius.circular(45.0),
+            //           child: Card(
+            //               shape: RoundedRectangleBorder(
+            //                 borderRadius: BorderRadius.circular(45.0),
+            //               ),
+            //               child: const Icon(
+            //                 Icons.navigate_before_rounded,
+            //                 color: AppColors.black,
+            //                 weight: 50,
+            //                 size: 35,
+            //               )),
+            //         ),
+            //       ),
+            //     )),
           ],
         ),
       ),
@@ -98,6 +101,7 @@ class _MainViewState extends State<MainView>{
       child: CommonTextWidget(
         text: text,
         textColor: AppColors.black,
+        fontWeight: FontWeight.bold,
       ),
     );
   }
@@ -107,20 +111,14 @@ class _MainViewState extends State<MainView>{
       backgroundColor: AppColors.white,
       title: const CommonTextWidget(text: AppStrings.appName),
       centerTitle: true,
-      leading: InkWell(
-        onTap: () => controller.scaffoldState.currentState?.openDrawer(),
-        radius: 45.0,
-        borderRadius: BorderRadius.circular(45.0),
-        child: Card(
-            shape: RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(45.0),
-            ),
-            child: const Icon(
-              Icons.navigate_next_rounded,
-              color: AppColors.black,
-              weight: 50,
-              size: 35,
-            )),
+      leading: IconButton(
+        onPressed: () => controller.scaffoldState.currentState?.openDrawer(),
+        icon: const Icon(
+          Icons.menu_rounded,
+          color: AppColors.black,
+          weight: 50,
+          size: 35,
+        ),
       ),
       actions: [
         IconButton(
@@ -163,7 +161,7 @@ class _MainViewState extends State<MainView>{
               label: 'Videos'),
           BottomNavigationBarItem(
               icon: Icon(
-                Icons.spellcheck_rounded,
+                Icons.manage_search,
               ),
               label: 'Dictionary'),
         ]);
