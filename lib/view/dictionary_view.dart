@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+
 import 'package:english_stories/controller/dictionary_controller.dart';
 import 'package:english_stories/widgets/common_text_field_widget.dart';
 import 'package:english_stories/widgets/common_text_widget.dart';
-import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 
 class DictionaryView extends StatelessWidget {
   const DictionaryView({super.key});
@@ -39,6 +41,6 @@ class DictionaryView extends StatelessWidget {
   }
 
   Widget _mainContentWidget(BuildContext context, DictionaryController controller){
-    return SizedBox();
+    return const SizedBox();
   }
 }

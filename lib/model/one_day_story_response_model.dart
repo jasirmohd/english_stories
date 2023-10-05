@@ -1,31 +1,31 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
-class VideoResponseModel {
+class OneDayStoryResponseModel {
   final String? id;
   final String date;
   final String title;
   final String category;
-  final String videoUrl;
+  final String body;
   final String imageUrl;
 
-  VideoResponseModel({
+  OneDayStoryResponseModel({
     this.id,
     required this.date,
     required this.title,
     required this.category,
-    required this.videoUrl,
+    required this.body,
     required this.imageUrl
   });
 
-  factory VideoResponseModel.fromSnapshot(
+  factory OneDayStoryResponseModel.fromSnapshot(
       DocumentSnapshot<Map<String, dynamic>> doc) {
     final data = doc.data()!;
-    return VideoResponseModel(
+    return OneDayStoryResponseModel(
         id: doc.id,
         date: data['date'],
         title: data['title'],
         category: data['category'],
-        videoUrl: data['video_url'],
+        body: data['body'],
         imageUrl: data['image_url']
     );
   }

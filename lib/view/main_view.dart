@@ -143,8 +143,8 @@ class _MainViewState extends State<MainView>{
     return BottomNavigationBar(
         selectedItemColor: AppColors.black,
         unselectedItemColor: AppColors.whiteFade,
-        selectedFontSize: 6.0,
-        unselectedFontSize: 6.0,
+        selectedFontSize: 8.0,
+        unselectedFontSize: 8.0,
         currentIndex: controller.currentIndex,
         showUnselectedLabels: false,
         onTap: controller.onItemTap,
@@ -161,9 +161,9 @@ class _MainViewState extends State<MainView>{
               label: 'Videos'),
           BottomNavigationBarItem(
               icon: Icon(
-                Icons.manage_search,
+                Icons.menu_book_rounded,
               ),
-              label: 'Dictionary'),
+              label: 'Books'),
         ]);
   }
 }
