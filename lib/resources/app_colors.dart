@@ -6,4 +6,5 @@ class AppColors{
   static const Color whiteFade = Color(0xFFE8E8E8);
   static const Color black = Color(0xFF000000);
   static const Color blackFade = Color(0xDF080808);
+  static const Color grey = Color(0xFF232222);
 }

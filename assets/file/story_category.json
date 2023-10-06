@@ -1,28 +1,123 @@
 {
   "data": [
-    "Akbar Birbal Stories",
-    "Tenali Rama Stories",
-    "Panchatantra Stories",
-    "Arabian Nights Stories",
-    "Animal Stories",
-    "Bedtime Stories",
-    "Classic Stories",
-    "Comical Stories",
-    "Education Stories",
-    "Fables Stories",
-    "Family Stories",
-    "Funny Stories",
-    "General Stories",
-    "Humorous Stories",
-    "Inspirational Stories",
-    "Kid Stories",
-    "Life Stories",
-    "Long Stories",
-    "Love Stories",
-    "Moral Stories",
-    "Motivational Stories",
-    "Other Stories",
-    "Short Stories",
-    "Student Stories"
+    {
+      "category": "Akbar Birbal Stories",
+      "image": "assets/images/akbar_birbal.PNG"
+    },
+
+    {
+      "category": "Tenali Rama Stories",
+      "image": "assets/images/tenali_rama.PNG"
+    },
+
+    {
+      "category": "Panchatantra Stories",
+      "image": "assets/images/panchatantra.PNG"
+    },
+
+    {
+      "category": "Arabian Nights Stories",
+      "image": "assets/images/arabian_nights.PNG"
+    },
+
+    {
+      "category": "Animal Stories",
+      "image": "assets/images/animal.PNG"
+    },
+
+    {
+      "category": "Bedtime Stories",
+      "image": "assets/images/bedtime.PNG"
+    },
+
+    {
+      "category": "Classic Stories",
+      "image": "assets/images/classic.PNG"
+    },
+
+    {
+      "category": "Comical Stories",
+      "image": "assets/images/comical.PNG"
+    },
+
+    {
+      "category": "Education Stories",
+      "image": "assets/images/education.PNG"
+    },
+
+    {
+      "category": "Fables Stories",
+      "image": "assets/images/fables.PNG"
+    },
+
+    {
+      "category": "Family Stories",
+      "image": "assets/images/family.PNG"
+    },
+
+    {
+      "category": "Funny Stories",
+      "image": "assets/images/funny.PNG"
+    },
+
+    {
+      "category": "General Stories",
+      "image": "assets/images/general.PNG"
+    },
+
+    {
+      "category": "Humorous Stories",
+      "image": "assets/images/humorous.PNG"
+    },
+
+    {
+      "category": "Inspirational Stories",
+      "image": "assets/images/inspirational.PNG"
+    },
+
+    {
+      "category": "Kid Stories",
+      "image": "assets/images/kid.PNG"
+    },
+
+    {
+      "category": "Life Stories",
+      "image": "assets/images/life.PNG"
+    },
+
+    {
+      "category": "Long Stories",
+      "image": "assets/images/long.PNG"
+    },
+
+    {
+      "category": "Love Stories",
+      "image": "assets/images/love.PNG"
+    },
+
+    {
+      "category": "Moral Stories",
+      "image": "assets/images/moral.PNG"
+    },
+
+    {
+      "category": "Motivational Stories",
+      "image": "assets/images/motivational.PNG"
+    },
+
+    {
+      "category": "Other Stories",
+      "image": "assets/images/other.PNG"
+    },
+
+    {
+      "category": "Short Stories",
+      "image": "assets/images/short.PNG"
+    },
+
+    {
+      "category": "Student Stories",
+      "image": "assets/images/student.PNG"
+    }
   ]
 }
