@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 
 import '../resources/app_colors.dart';
 import '../resources/app_strings.dart';
+import '../service/notification_service.dart';
 import '../view/home_view.dart';
 import '../view/video_list_view.dart';
 import '../widgets/common_text_widget.dart';
@@ -104,7 +105,7 @@ class _MainViewState extends State<MainView> {
   PreferredSizeWidget _appBarWidget(
       BuildContext context, MainController controller) {
     return AppBar(
-      title: const CommonTextWidget(text: AppStrings.appName),
+      title: Text(AppStrings.appName, style: Theme.of(context).textTheme.titleMedium,),
       centerTitle: true,
       leading: IconButton(
         onPressed: () => controller.scaffoldState.currentState?.openDrawer(),
@@ -126,7 +127,10 @@ class _MainViewState extends State<MainView> {
               )),
         ),
         IconButton(
-            onPressed: () {},
+            onPressed: () {
+              // Schedule the daily notification when the app starts
+              NotificationService().scheduleDailyNotification(title: "test",body: "this is a scheduled test message");
+            },
             icon: const Icon(
               Icons.notifications_none_rounded,
               size: 25,
