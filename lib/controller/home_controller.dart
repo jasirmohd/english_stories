@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:english_stories/model/one_day_story_response_model.dart';
+import 'package:english_stories/model/story_category_model.dart';
 import 'package:english_stories/resources/app_assets.dart';
 import 'package:english_stories/utils/route_utils.dart';
 import 'package:flutter/services.dart';
@@ -14,12 +14,14 @@ class HomeController extends GetxController{
 
   final _db = FirebaseFirestore.instance;
 
-  final storyCategoryList = RxList<String>([]);
+  final storyCategoryList = RxList<StoryCategoryData>([]);
 
   final oneDayTitle = ''.obs;
   final onDayImage = ''.obs;
   final onDayCategory = ''.obs;
   final onDayBody = ''.obs;
+
+  final oneDayStoryVisibility = RxBool(false);
 
   @override
   void onInit() {
@@ -31,9 +33,8 @@ class HomeController extends GetxController{
 
   Future getStoryCategory() async {
     String storyCategoryJson = await rootBundle.loadString(AppAssets.storyCategory);
-    final Map<String, dynamic> data = json.decode(storyCategoryJson);
-    List<String>? stringList = [];
-    stringList = (data['data'] as List).map((item) => item as String).toList();
+    StoryCategoryModel storyModel = storyCategoryModelFromJson(storyCategoryJson);
+    List<StoryCategoryData> stringList = storyModel.data;
     if(stringList.isNotEmpty) {
       log('length - ${stringList.length}');
       if (storyCategoryList.isNotEmpty) {
@@ -46,11 +47,16 @@ class HomeController extends GetxController{
 
   Future getOneDayStoryFromApi(String date) async {
     final snapshot = await _db.collection('one_day_story').where("date", isEqualTo: date).get();
-    final oneDayStoryData = snapshot.docs.map((e) => OneDayStoryResponseModel.fromSnapshot(e)).single;
-    oneDayTitle.value = oneDayStoryData.title;
-    onDayImage.value = oneDayStoryData.imageUrl;
-    onDayBody.value = oneDayStoryData.body;
-    onDayCategory.value = oneDayStoryData.category;
+    final oneDayStoryData = snapshot.docs.map((e) => OneDayStoryResponseModel.fromSnapshot(e));
+    if(oneDayStoryData.isNotEmpty) {
+      oneDayStoryVisibility.value = true;
+      oneDayTitle.value = oneDayStoryData.single.title;
+      onDayImage.value = oneDayStoryData.single.imageUrl;
+      onDayBody.value = oneDayStoryData.single.body;
+      onDayCategory.value = oneDayStoryData.single.category;
+    }else{
+      oneDayStoryVisibility.value = false;
+    }
   }
 
   onOneDayStoryTap(){
@@ -63,6 +69,6 @@ class HomeController extends GetxController{
   }
 
   onItemTap(int index){
-    Get.toNamed(RouteUtils.storyListView, arguments: {"category":storyCategoryList[index]});
+    Get.toNamed(RouteUtils.storyListView, arguments: {"category":storyCategoryList[index].category});
   }
 }

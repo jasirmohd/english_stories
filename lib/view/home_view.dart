@@ -15,34 +15,27 @@ class _HomeViewState extends State<HomeView> {
   Widget build(BuildContext context) {
     return GetBuilder(
       init: HomeController(),
-      builder:(controller) => SafeArea(
-        child: SizedBox(
-          width: Get.width,
-          height: Get.height,
-          child: ListView(
-            children: [
-              _oneDayStoryWidget(context, controller),
-              _contentWidget(context, controller),
-            ],
-          ),
+      builder: (controller) => SizedBox(
+        width: Get.width,
+        height: Get.height,
+        child: ListView(
+          children: [
+            Obx(() => Visibility( visible: controller.oneDayStoryVisibility.value,child: _oneDayStoryWidget(context, controller))),
+            _contentWidget(context, controller),
+          ],
         ),
       ),
     );
   }
 
-  Widget _oneDayStoryWidget(BuildContext context, HomeController controller){
-    return Obx(
-        () => InkWell(
+  Widget _oneDayStoryWidget(BuildContext context, HomeController controller) {
+    return  InkWell(
         onTap: () => controller.onOneDayStoryTap(),
         child: Card(
-          margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-          ),
           child: SizedBox(
             height: 200,
             width: Get.width,
-            child:  Padding(
+            child: Padding(
               padding: const EdgeInsets.all(10.0),
               child: Column(
                 children: [
@@ -52,23 +45,26 @@ class _HomeViewState extends State<HomeView> {
                         height: 160,
                         width: Get.width,
                         decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.black,),
+                          borderRadius: BorderRadius.circular(5.0),
+                          color: Colors.black,
+                        ),
                       )),
-                  Expanded(flex: 0, child: CommonTextWidget(text: controller.oneDayTitle.value))
+                  Expanded(
+                      flex: 0,
+                      child:
+                          Text(controller.oneDayTitle.value, style: Theme.of(context).textTheme.titleSmall,))
                 ],
               ),
             ),
           ),
         ),
-      ),
     );
   }
 
   Widget _contentWidget(BuildContext context, HomeController controller) {
     return SizedBox(
       child: Obx(
-          () => ListView.builder(
+        () => ListView.builder(
             itemCount: controller.storyCategoryList.length,
             physics: const NeverScrollableScrollPhysics(),
             shrinkWrap: true,
@@ -79,17 +75,14 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _itemWidget(BuildContext context, int index, HomeController controller) {
+  Widget _itemWidget(
+      BuildContext context, int index, HomeController controller) {
     return InkWell(
       onTap: () => controller.onItemTap(index),
       child: Card(
-        margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
-        shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(10.0)
-        ),
         child: SizedBox(
           width: Get.width,
-          child:  Padding(
+          child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(
               children: [
@@ -99,11 +92,19 @@ class _HomeViewState extends State<HomeView> {
                       height: 90,
                       width: 70,
                       decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10.0),
-                        color: Colors.black,),
+                        borderRadius: BorderRadius.circular(5.0),
+                        image: DecorationImage(image: AssetImage(controller.storyCategoryList[index].image))
+                      ),
                     )),
-                const SizedBox(width: 15,),
-                Expanded(flex: 1, child: CommonTextWidget(text: controller.storyCategoryList[index], textSize: 16, fontWeight: FontWeight.bold,))
+                const SizedBox(
+                  width: 15,
+                ),
+                Expanded(
+                    flex: 1,
+                    child: Text(
+                      controller.storyCategoryList[index].category,
+                      style: Theme.of(context).textTheme.titleMedium,
+                    ))
               ],
             ),
           ),

@@ -32,7 +32,6 @@ class _VideoListViewState extends State<VideoListView> {
 
   Widget _itemWidget(BuildContext context, int index, VideoListController controller) {
     return Card(
-      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       child: SizedBox(
         height: 200,
         width: Get.width,
