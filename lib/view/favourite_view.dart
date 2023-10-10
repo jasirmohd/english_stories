@@ -1,4 +1,5 @@
 import 'package:english_stories/controller/favourite_controller.dart';
+import 'package:english_stories/widgets/common_banner_ads_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -14,19 +15,26 @@ class _FavouriteViewState extends State<FavouriteView> {
   Widget build(BuildContext context) {
     return GetBuilder<FavouriteController>(
       init: FavouriteController(),
-      builder:(controller) => Scaffold(
+      builder: (controller) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: _appBarWidget(context),
         body: SafeArea(
-            child: _contentWidget(context,controller)),
+            child: Column(
+          children: [
+            Expanded(flex: 1, child: _contentWidget(context, controller)),
+            Expanded(flex: 0, child: _bannerAdsWidget(context, controller))
+          ],
+        )),
       ),
     );
   }
 
-  PreferredSizeWidget _appBarWidget(
-      BuildContext context) {
+  PreferredSizeWidget _appBarWidget(BuildContext context) {
     return AppBar(
-      title: Text('Favourite', style: Theme.of(context).textTheme.titleMedium,),
+      title: Text(
+        'Favourite',
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
       centerTitle: true,
       leading: IconButton(
         onPressed: () => Get.back(),
@@ -39,30 +47,49 @@ class _FavouriteViewState extends State<FavouriteView> {
     );
   }
 
-  Widget _contentWidget(BuildContext context,FavouriteController controller) {
+  Widget _contentWidget(BuildContext context, FavouriteController controller) {
     return Obx(
-        () => ListView.builder(
+      () => ListView.builder(
           itemCount: controller.favouriteList.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
-            return _itemWidget(context, index,controller);
+            return _itemWidget(context, index, controller);
           }),
     );
   }
 
-  Widget _itemWidget(BuildContext context, int index,FavouriteController controller) {
+  Widget _itemWidget(
+      BuildContext context, int index, FavouriteController controller) {
     return Card(
       child: SizedBox(
         width: Get.width,
-        child:  Padding(
+        child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(
             children: [
-              Expanded(flex: 1, child: Text(controller.favouriteList[index].title.toString(), style: Theme.of(context).textTheme.titleMedium,)),
-               ],
+              Expanded(
+                  flex: 1,
+                  child: Text(
+                    controller.favouriteList[index].title.toString(),
+                    style: Theme.of(context).textTheme.titleMedium,
+                  )),
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _bannerAdsWidget(
+      BuildContext context, FavouriteController controller) {
+    return Obx(
+      () => controller.isLoaded.value
+          ? CommonBannerAdsWidget(
+              width: controller.adSize.width,
+              height: controller.adSize.height,
+              bannerAd: controller.bannerAd!,
+            )
+          : const SizedBox(),
     );
   }
 }

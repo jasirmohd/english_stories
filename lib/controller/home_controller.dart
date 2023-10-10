@@ -1,33 +1,30 @@
 import 'dart:developer';
+import 'dart:io';
 
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:english_stories/model/one_day_story_response_model.dart';
 import 'package:english_stories/model/story_category_model.dart';
 import 'package:english_stories/resources/app_assets.dart';
 import 'package:english_stories/utils/route_utils.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:intl/intl.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomeController extends GetxController{
   static HomeController get to => Get.put(HomeController());
 
-  final _db = FirebaseFirestore.instance;
-
   final storyCategoryList = RxList<StoryCategoryData>([]);
 
-  final oneDayTitle = ''.obs;
-  final onDayImage = ''.obs;
-  final onDayCategory = ''.obs;
-  final onDayBody = ''.obs;
+  NativeAd? nativeAd;
+  final nativeAdIsLoaded = RxBool(false);
 
-  final oneDayStoryVisibility = RxBool(false);
+  final String _adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/2247696110'
+      : 'ca-app-pub-3940256099942544/3986624511';
 
   @override
   void onInit() {
     getStoryCategory();
-    String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
-    getOneDayStoryFromApi(currentDate);
+    loadAd();
     super.onInit();
   }
 
@@ -45,30 +42,39 @@ class HomeController extends GetxController{
     }
   }
 
-  Future getOneDayStoryFromApi(String date) async {
-    final snapshot = await _db.collection('one_day_story').where("date", isEqualTo: date).get();
-    final oneDayStoryData = snapshot.docs.map((e) => OneDayStoryResponseModel.fromSnapshot(e));
-    if(oneDayStoryData.isNotEmpty) {
-      oneDayStoryVisibility.value = true;
-      oneDayTitle.value = oneDayStoryData.single.title;
-      onDayImage.value = oneDayStoryData.single.imageUrl;
-      onDayBody.value = oneDayStoryData.single.body;
-      onDayCategory.value = oneDayStoryData.single.category;
-    }else{
-      oneDayStoryVisibility.value = false;
-    }
-  }
-
-  onOneDayStoryTap(){
-    Get.toNamed(RouteUtils.storyView, arguments: {
-      "category":onDayCategory.value,
-      "title":oneDayTitle.value,
-      "body":onDayBody.value,
-      "image_url":onDayImage.value
-    });
+  /// Loads a native ad.
+  void loadAd() {
+    nativeAd = NativeAd(
+        adUnitId: _adUnitId,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            debugPrint('$NativeAd loaded.');
+            nativeAdIsLoaded.value = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            // Dispose the ad here to free resources.
+            debugPrint('$NativeAd failed to load: $error');
+            ad.dispose();
+          },
+        ),
+        request: const AdRequest(),
+        // Styling
+        nativeTemplateStyle: NativeTemplateStyle(
+          // Required: Choose a template.
+          templateType: TemplateType.medium,
+          // Optional: Customize the ad's style.
+          cornerRadius: 10.0,
+        ))
+      ..load();
   }
 
   onItemTap(int index){
     Get.toNamed(RouteUtils.storyListView, arguments: {"category":storyCategoryList[index].category});
+  }
+
+  @override
+  void dispose() {
+    nativeAd?.dispose();
+    super.dispose();
   }
 }

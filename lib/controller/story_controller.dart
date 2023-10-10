@@ -1,11 +1,13 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:english_stories/model/story_db_model.dart';
 import 'package:english_stories/repository/story_repository.dart';
-import 'package:flex_color_picker/flex_color_picker.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter_tts/flutter_tts.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:share_plus/share_plus.dart';
 
 class StoryController extends GetxController {
   static StoryController get to => Get.put(StoryController());
@@ -23,13 +25,29 @@ class StoryController extends GetxController {
 
   final isAudioPlaying = RxBool(false);
 
-  final textColor = RxString('');
-  final backgroundColor = RxString('');
-
   final isBookmarked = RxBool(false);
   final isFavourite = RxBool(false);
 
   final FlutterTts _flutterTts = FlutterTts();
+
+  BannerAd? bannerAd;
+  final isLoaded = RxBool(false);
+
+  // TODO: replace this test ad unit with your own ad unit.
+  final adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
+  RewardedInterstitialAd? rewardeInterstitialdAd;
+
+  // TODO: replace this test ad unit with your own ad unit.
+  final videoAdUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/5354046379'
+      : 'ca-app-pub-3940256099942544/6978759866';
+
+  final AdSize adSize = const AdSize(width: 300, height: 50);
+
+  final rewardScore = RxInt(0);
 
   @override
   void onInit() {
@@ -37,13 +55,72 @@ class StoryController extends GetxController {
     title.value = arguments['title'];
     body.value = arguments['body'];
     image.value = arguments['image'];
-    textColor.value =
-        Theme.of(Get.context!).textTheme.titleMedium!.color.toString();
-    backgroundColor.value =
-        Theme.of(Get.context!).colorScheme.background.toString();
     update();
+    loadVideoAd();
+    loadAd();
     initFlutterTTS();
+    loadBookmarked();
     super.onInit();
+  }
+
+  /// Loads a banner ad.
+  void loadAd() {
+    bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+          isLoaded.value = true;
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          // Dispose the ad here to free resources.
+          ad.dispose();
+        },
+      ),
+    )..load();
+  }
+
+  /// Loads a rewarded ad.
+  void loadVideoAd() {
+    RewardedInterstitialAd.load(
+        adUnitId: videoAdUnitId,
+        request: const AdRequest(),
+        rewardedInterstitialAdLoadCallback: RewardedInterstitialAdLoadCallback(
+          // Called when an ad is successfully received.
+          onAdLoaded: (ad) {
+            debugPrint('$ad loaded.');
+            // Keep a reference to the ad so you can show it later.
+            rewardeInterstitialdAd = ad;
+          },
+          // Called when an ad request failed.
+          onAdFailedToLoad: (LoadAdError error) {
+            debugPrint('RewardedInterstitialAd failed to load: $error');
+          },
+        ));
+  }
+
+  Future showRewardedAd() async {
+    if(rewardeInterstitialdAd != null){
+      rewardeInterstitialdAd!.fullScreenContentCallback = FullScreenContentCallback(
+        onAdDismissedFullScreenContent: (ad){
+          ad.dispose();
+          loadVideoAd();
+        },
+        onAdFailedToShowFullScreenContent: (ad,error){
+          ad.dispose();
+          loadVideoAd();
+      }
+      );
+      rewardeInterstitialdAd?.show(onUserEarnedReward: (AdWithoutView ad, RewardItem rewardItem) {
+        rewardScore.value++;
+      });
+      rewardeInterstitialdAd = null;
+    }
   }
 
   initFlutterTTS() {
@@ -129,63 +206,86 @@ class StoryController extends GetxController {
     }
   }
 
-  onTextColorChangeTap() {
-    showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Pick a color!'),
-            content: SingleChildScrollView(
-              child: ColorPicker(
-                  pickersEnabled: const <ColorPickerType, bool>{
-                    ColorPickerType.wheel: true,
-                    ColorPickerType.accent: false,
-                    ColorPickerType.primary: false,
-                  },
-                  onColorChanged: (value) {
-                    String color = value.hex.toString();
-                    textColor.value = color;
-                  }),
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                child: const Text('DONE'),
-                onPressed: () {
-                  Navigator.of(context).pop(); //dismiss the color picker
-                },
-              ),
-            ],
-          );
-        });
+  onShareTap() {
+    Share.share('${title.value}\n${body.value}');
   }
 
-  onBackgroundChangeTap() {
-    showDialog(
-        context: Get.context!,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: const Text('Pick a color!'),
-            content: SingleChildScrollView(
-              child: ColorPicker(
-                  pickersEnabled: const <ColorPickerType, bool>{
-                    ColorPickerType.wheel: true,
-                    ColorPickerType.accent: false,
-                    ColorPickerType.primary: false,
-                  },
-                  onColorChanged: (value) {
-                    String color = value.hex.toString();
-                    backgroundColor.value = color;
-                  }),
-            ),
-            actions: <Widget>[
-              ElevatedButton(
-                child: const Text('DONE'),
-                onPressed: () {
-                  Navigator.of(context).pop(); //dismiss the color picker
-                },
-              ),
-            ],
-          );
-        });
+  @override
+  void dispose() {
+    bannerAd?.dispose();
+    super.dispose();
   }
+
+  Future<bool> onBackPress() async {
+    await showRewardedAd();
+    Get.back();
+    rewardeInterstitialdAd?.dispose();
+    return true;
+  }
+
+  onBackTap() async {
+    await showRewardedAd();
+    rewardeInterstitialdAd?.dispose();
+    Get.back();
+  }
+
+// onTextColorChangeTap() {
+//   showDialog(
+//       context: Get.context!,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Text('Pick a color!'),
+//           content: SingleChildScrollView(
+//             child: ColorPicker(
+//                 pickersEnabled: const <ColorPickerType, bool>{
+//                   ColorPickerType.wheel: true,
+//                   ColorPickerType.accent: false,
+//                   ColorPickerType.primary: false,
+//                 },
+//                 onColorChanged: (value) {
+//                   String color = value.hex.toString();
+//                   textColor.value = color;
+//                 }),
+//           ),
+//           actions: <Widget>[
+//             ElevatedButton(
+//               child: const Text('DONE'),
+//               onPressed: () {
+//                 Navigator.of(context).pop(); //dismiss the color picker
+//               },
+//             ),
+//           ],
+//         );
+//       });
+// }
+//
+// onBackgroundChangeTap() {
+//   showDialog(
+//       context: Get.context!,
+//       builder: (BuildContext context) {
+//         return AlertDialog(
+//           title: const Text('Pick a color!'),
+//           content: SingleChildScrollView(
+//             child: ColorPicker(
+//                 pickersEnabled: const <ColorPickerType, bool>{
+//                   ColorPickerType.wheel: true,
+//                   ColorPickerType.accent: false,
+//                   ColorPickerType.primary: false,
+//                 },
+//                 onColorChanged: (value) {
+//                   String color = value.hex.toString();
+//                   backgroundColor.value = color;
+//                 }),
+//           ),
+//           actions: <Widget>[
+//             ElevatedButton(
+//               child: const Text('DONE'),
+//               onPressed: () {
+//                 Navigator.of(context).pop(); //dismiss the color picker
+//               },
+//             ),
+//           ],
+//         );
+//       });
+// }
 }

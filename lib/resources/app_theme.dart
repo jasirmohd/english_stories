@@ -37,7 +37,9 @@ class AppTheme {
         titleMedium: TextStyle(
             color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         titleSmall: TextStyle(
-            color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold)),
+            color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
+      bodySmall: TextStyle(
+          color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal),),
     cardTheme: CardTheme(
       color: Colors.grey[200]!,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),
@@ -74,7 +76,9 @@ class AppTheme {
           titleMedium: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           titleSmall: TextStyle(
-              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold)),
+              color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
+        bodySmall: TextStyle(
+            color: Colors.white, fontSize: 14, fontWeight: FontWeight.normal),),
       cardTheme: CardTheme(
           color: Colors.grey[900]!,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(5.0)),

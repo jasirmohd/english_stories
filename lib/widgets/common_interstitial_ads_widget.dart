@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class VideoView extends StatelessWidget {
-  const VideoView({super.key});
+class CommonInterstitialAdsWidget extends StatelessWidget {
+  const CommonInterstitialAdsWidget({super.key});
 
   @override
   Widget build(BuildContext context) {

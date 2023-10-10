@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:hive_flutter/hive_flutter.dart';
 
 import '../model/story_db_model.dart';
@@ -28,5 +30,7 @@ class LocalDBService{
   Future updateStoryListFromDB(int index, StoryDBModel storyDBModel) async {
     Box<StoryDBModel> box = Hive.box<StoryDBModel>('story_box');
     await box.putAt(index, storyDBModel);
+    StoryDBModel? model =  box.getAt(index);
+    log('data - ${model!.title}, ${model!.isFavourite ?? 0}');
   }
 }
