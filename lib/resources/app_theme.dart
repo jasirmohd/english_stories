@@ -38,7 +38,7 @@ class AppTheme {
             color: Colors.black, fontSize: 20, fontWeight: FontWeight.bold),
         titleSmall: TextStyle(
             color: Colors.black, fontSize: 16, fontWeight: FontWeight.bold),
-      bodyMedium: TextStyle(
+      bodySmall: TextStyle(
           color: Colors.black, fontSize: 14, fontWeight: FontWeight.normal),),
     cardTheme: CardTheme(
       color: Colors.grey[200]!,
@@ -77,7 +77,7 @@ class AppTheme {
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           titleSmall: TextStyle(
               color: Colors.white, fontSize: 16, fontWeight: FontWeight.bold),
-        bodyMedium: TextStyle(
+        bodySmall: TextStyle(
             color: Colors.white, fontSize: 14, fontWeight: FontWeight.normal),),
       cardTheme: CardTheme(
           color: Colors.grey[900]!,

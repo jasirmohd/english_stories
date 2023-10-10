@@ -1,6 +1,7 @@
 import 'package:english_stories/controller/home_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomeView extends StatefulWidget {
   const HomeView({super.key});
@@ -12,16 +13,14 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
+    return GetBuilder<HomeController>(
       init: HomeController(),
       builder: (controller) => SizedBox(
         width: Get.width,
         height: Get.height,
         child: ListView(
           children: [
-            Obx(() => Visibility(
-                visible: controller.oneDayStoryVisibility.value,
-                child: _oneDayStoryWidget(context, controller))),
+            // _adContentWidget(context, controller),
             _contentWidget(context, controller),
           ],
         ),
@@ -29,40 +28,7 @@ class _HomeViewState extends State<HomeView> {
     );
   }
 
-  Widget _oneDayStoryWidget(BuildContext context, HomeController controller) {
-    return InkWell(
-      onTap: () => controller.onOneDayStoryTap(),
-      child: Card(
-        child: SizedBox(
-          height: 200,
-          width: Get.width,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Column(
-              children: [
-                Expanded(
-                    flex: 1,
-                    child: Container(
-                      height: 160,
-                      width: Get.width,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(5.0),
-                        color: Colors.black,
-                      ),
-                    )),
-                Expanded(
-                    flex: 0,
-                    child: Text(
-                      controller.oneDayTitle.value,
-                      style: Theme.of(context).textTheme.titleSmall,
-                    ))
-              ],
-            ),
-          ),
-        ),
-      ),
-    );
-  }
+
 
   Widget _contentWidget(BuildContext context, HomeController controller) {
     return SizedBox(
@@ -95,10 +61,9 @@ class _HomeViewState extends State<HomeView> {
                       height: 90,
                       width: 70,
                       decoration: BoxDecoration(
-                          borderRadius: BorderRadius.circular(5.0),
-                          image: DecorationImage(
-                              image: AssetImage(
-                                  controller.storyCategoryList[index].image))),
+                        borderRadius: BorderRadius.circular(5.0),
+                        image: DecorationImage(image: AssetImage(controller.storyCategoryList[index].image))
+                      ),
                     )),
                 const SizedBox(
                   width: 15,
@@ -114,6 +79,21 @@ class _HomeViewState extends State<HomeView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _adContentWidget(BuildContext context, HomeController controller){
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Obx(() => !controller.nativeAdIsLoaded.value ? const SizedBox() : ConstrainedBox(
+        constraints: const BoxConstraints(
+          minWidth: 320, // minimum recommended width
+          minHeight: 90, // minimum recommended height
+          maxWidth: 400,
+          maxHeight: 200,
+        ),
+        child: AdWidget(ad: controller.nativeAd!),
+      )),
     );
   }
 }

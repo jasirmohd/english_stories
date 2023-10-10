@@ -1,28 +1,33 @@
-import 'package:english_stories/controller/random_story_controller.dart';
+import 'package:english_stories/widgets/common_native_ads_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../controller/random_story_controller.dart';
+
 class RandomStoryView extends StatelessWidget {
-  const RandomStoryView({Key? key}) : super(key: key);
+  const RandomStoryView({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return GetBuilder(
+    return GetBuilder<RandomStoryController>(
       init: RandomStoryController(),
-        builder: (controller) => SizedBox(
-          width: Get.width,
-          height: Get.height,
-          child: ListView(
-            children: [
-              Obx(() => Visibility(
-                  visible: controller.oneDayStoryVisibility.value,
-                  child: _oneDayStoryWidget(context, controller))),
-            ],
-          ),
-        ),);
+      builder: (controller) => SizedBox(
+        width: Get.width,
+        height: Get.height,
+        child: ListView(
+          children: [
+            Obx(() => Visibility(
+                visible: controller.oneDayStoryVisibility.value,
+                child: _oneDayStoryWidget(context, controller))),
+            _adContentWidget(context, controller)
+          ],
+        ),
+      ),
+    );
   }
 
-  Widget _oneDayStoryWidget(BuildContext context, RandomStoryController controller) {
+  Widget _oneDayStoryWidget(
+      BuildContext context, RandomStoryController controller) {
     return InkWell(
       onTap: () => controller.onOneDayStoryTap(),
       child: Card(
@@ -54,6 +59,18 @@ class RandomStoryView extends StatelessWidget {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _adContentWidget(
+      BuildContext context, RandomStoryController controller) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Obx(() => !controller.nativeAdIsLoaded.value
+          ? const SizedBox()
+          : CommonNativeAdsWidget(isSmall: false,
+              nativeAd: controller.nativeAd!,
+            )),
     );
   }
 }

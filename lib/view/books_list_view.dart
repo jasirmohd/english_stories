@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_rating_bar/flutter_rating_bar.dart';
 import 'package:get/get.dart';
 
+import '../widgets/common_native_ads_widget.dart';
+
 class BooksListView extends StatelessWidget {
   const BooksListView({super.key});
 
@@ -12,12 +14,17 @@ class BooksListView extends StatelessWidget {
     return GetBuilder<BookListController>(
         init: BookListController(),
         builder: (controller) =>
-            SafeArea(child: _contentWidget(context, controller)));
+            SafeArea(child: Column(
+              children: [
+                Expanded(flex:0,child: _adContentWidget(context, controller)),
+                Expanded(flex:1,child: _contentWidget(context, controller)),
+              ],
+            )));
   }
 
   Widget _contentWidget(BuildContext context, BookListController controller) {
     return Obx(
-        () => ListView.builder(
+      () => ListView.builder(
           itemCount: controller.bookList.length,
           shrinkWrap: true,
           itemBuilder: (context, index) {
@@ -28,55 +35,74 @@ class BooksListView extends StatelessWidget {
 
   Widget _itemWidget(
       BuildContext context, int index, BookListController controller) {
-    return InkWell(
-      onTap: () {},
-      child: Card(
-        child: SizedBox(
-          height: 200,
-          width: Get.width,
-          child: Padding(
-            padding: const EdgeInsets.all(10.0),
-            child: Row(
-              children: [
-                Expanded(
-                    flex: 0,
-                    child: CachedNetworkImage(imageUrl: controller.bookList[index].imageUrl,
-                      width: 110,fit: BoxFit.fill,)),
-                const SizedBox(
-                  width: 20,
-                ),
-                Expanded(
-                    flex: 1,
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(controller.bookList[index].title,style: Theme.of(context).textTheme.titleMedium,),
-                        const SizedBox(height: 5,),
-                        Text(controller.bookList[index].description,style: Theme.of(context).textTheme.bodySmall,),
-                        const SizedBox(height: 5,),
-                        RatingBar.builder(
-                      initialRating: controller.bookList[index].rating,
-                      minRating: 1,
-                      direction: Axis.horizontal,
-                      allowHalfRating: true,
-                      itemCount: 5,
-                      itemSize: 15.0,
-                      itemPadding: const EdgeInsets.symmetric(horizontal: 4.0),
-                      itemBuilder: (context, _) => const Icon(
-                        Icons.star,
-                        color: Colors.amber,
-                        size: 20,
+    return Card(
+      child: SizedBox(
+        // height: 200,
+        width: Get.width,
+        child: Padding(
+          padding: const EdgeInsets.all(10.0),
+          child: Row(
+            children: [
+              Expanded(
+                  flex: 0,
+                  child: CachedNetworkImage(
+                    imageUrl: controller.bookList[index].imageUrl,
+                    height: 150,
+                    width: 110,
+                    fit: BoxFit.fill,
+                  )),
+              const SizedBox(
+                width: 20,
+              ),
+              Expanded(
+                  flex: 1,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        controller.bookList[index].title,
+                        style: Theme.of(context).textTheme.titleSmall,
                       ),
-                      onRatingUpdate: (rating) {},
-                    ),
-                      ],
-                    ))
-              ],
-            ),
+                      Text(
+                        controller.bookList[index].description,
+                        style: Theme.of(context).textTheme.bodySmall,
+                      ),
+                      RatingBar.builder(
+                        initialRating: controller.bookList[index].rating,
+                        minRating: controller.bookList[index].rating,
+                        direction: Axis.horizontal,
+                        allowHalfRating: true,
+                        itemCount: 5,
+                        itemSize: 20,
+                        itemPadding:
+                            const EdgeInsets.symmetric(horizontal: 4.0),
+                        itemBuilder: (context, _) => const Icon(
+                          Icons.star,
+                          color: Colors.amber,
+                        ),
+                        onRatingUpdate: (rating) {
+                          print(rating);
+                        },
+                      )
+                    ],
+                  ))
+            ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _adContentWidget(
+      BuildContext context, BookListController controller) {
+    return Padding(
+      padding: const EdgeInsets.all(10.0),
+      child: Obx(() => !controller.nativeAdIsLoaded.value
+          ? const SizedBox()
+          : CommonNativeAdsWidget(isSmall: true,
+        nativeAd: controller.nativeAd!,
+      )),
     );
   }
 }

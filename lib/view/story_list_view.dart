@@ -4,6 +4,8 @@ import 'package:english_stories/controller/story_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
+import '../widgets/common_banner_ads_widget.dart';
+
 class StoryListView extends StatefulWidget {
   const StoryListView({super.key});
 
@@ -19,7 +21,12 @@ class _StoryListViewState extends State<StoryListView> {
       builder: (controller) => Scaffold(
         backgroundColor: Theme.of(context).colorScheme.background,
         appBar: _headContentWidget(context, controller),
-        body: _contentWidget(context, controller),
+        body: Column(
+          children: [
+            Expanded(flex: 1, child: _contentWidget(context, controller)),
+            Expanded(flex: 0, child: _bannerAdsWidget(context, controller))
+          ],
+        ),
       ),
     );
   }
@@ -78,6 +85,19 @@ class _StoryListViewState extends State<StoryListView> {
           ),
         ),
       ),
+    );
+  }
+
+  Widget _bannerAdsWidget(
+      BuildContext context, StoryListController controller) {
+    return Obx(
+          () => controller.isLoaded.value
+          ? CommonBannerAdsWidget(
+        width: controller.adSize.width,
+        height: controller.adSize.height,
+        bannerAd: controller.bannerAd!,
+      )
+          : const SizedBox(),
     );
   }
 }

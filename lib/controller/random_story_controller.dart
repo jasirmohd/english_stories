@@ -1,17 +1,18 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:intl/intl.dart';
 
 import '../model/one_day_story_response_model.dart';
-import '../model/story_category_model.dart';
 import '../utils/route_utils.dart';
 
 class RandomStoryController extends GetxController{
   static RandomStoryController get to => Get.put(RandomStoryController());
 
   final _db = FirebaseFirestore.instance;
-
-  final storyCategoryList = RxList<StoryCategoryData>([]);
 
   final oneDayTitle = ''.obs;
   final onDayImage = ''.obs;
@@ -20,10 +21,18 @@ class RandomStoryController extends GetxController{
 
   final oneDayStoryVisibility = RxBool(false);
 
+  NativeAd? nativeAd;
+  final nativeAdIsLoaded = RxBool(false);
+
+  final String _adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/2247696110'
+      : 'ca-app-pub-3940256099942544/3986624511';
+
   @override
-  void onInit() {
+  onInit(){
     String currentDate = DateFormat('dd/MM/yyyy').format(DateTime.now());
     getOneDayStoryFromApi(currentDate);
+    loadAd();
     super.onInit();
   }
 
@@ -41,6 +50,32 @@ class RandomStoryController extends GetxController{
     }
   }
 
+  /// Loads a native ad.
+  void loadAd() {
+    nativeAd = NativeAd(
+        adUnitId: _adUnitId,
+        listener: NativeAdListener(
+          onAdLoaded: (ad) {
+            debugPrint('$NativeAd loaded.');
+              nativeAdIsLoaded.value = true;
+          },
+          onAdFailedToLoad: (ad, error) {
+            // Dispose the ad here to free resources.
+            debugPrint('$NativeAd failed to load: $error');
+            ad.dispose();
+          },
+        ),
+        request: const AdRequest(),
+        // Styling
+        nativeTemplateStyle: NativeTemplateStyle(
+          // Required: Choose a template.
+            templateType: TemplateType.medium,
+            // Optional: Customize the ad's style.
+            cornerRadius: 10.0,
+    ))
+      ..load();
+  }
+
   onOneDayStoryTap(){
     Get.toNamed(RouteUtils.storyView, arguments: {
       "category":onDayCategory.value,
@@ -49,4 +84,11 @@ class RandomStoryController extends GetxController{
       "image_url":onDayImage.value
     });
   }
+
+  @override
+  void dispose() {
+    nativeAd?.dispose();
+    super.dispose();
+  }
+
 }

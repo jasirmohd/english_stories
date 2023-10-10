@@ -6,7 +6,6 @@ import 'package:get/get.dart';
 
 import '../resources/app_colors.dart';
 import '../resources/app_strings.dart';
-import '../service/notification_service.dart';
 import '../view/home_view.dart';
 
 import '../controller/main_controller.dart';
@@ -44,42 +43,47 @@ class _MainViewState extends State<MainView> {
                 width: Get.width,
                 color: Colors.black,
               )),
-          // _sideDrawerItemWidget(context, AppStrings.oneDayStory),
-          _sideDrawerItemWidget(context, AppStrings.favourites, RouteUtils.favouriteView),
-          _sideDrawerItemWidget(context, AppStrings.bookmarks,RouteUtils.bookmarkView),
-          // _sideDrawerItemWidget(context, AppStrings.savedWords),
-          const Divider(
-            color: AppColors.black,
-          ),
-          _sideDrawerItemWidget(context, 'Remainder',''),
-          _sideDrawerItemWidget(context, AppStrings.settings,''),
-          _sideDrawerItemWidget(context, AppStrings.otherApps,''),
-          _sideDrawerItemWidget(context, AppStrings.rating,''),
-          _sideDrawerItemWidget(context, AppStrings.about,''),
-          _sideDrawerItemWidget(context, AppStrings.share,''),
-          // Expanded(
-          //     flex: 1,
-          //     child: SizedBox(
-          //       width: Get.width,
-          //       child: Align(
-          //         alignment: Alignment.bottomRight,
-          //         child: InkWell(
-          //           onTap: () => controller.scaffoldState.currentState?.openEndDrawer(),
-          //           radius: 45.0,
-          //           borderRadius: BorderRadius.circular(45.0),
-          //           child: Card(
-          //               shape: RoundedRectangleBorder(
-          //                 borderRadius: BorderRadius.circular(45.0),
-          //               ),
-          //               child: const Icon(
-          //                 Icons.navigate_before_rounded,
-          //                 color: AppColors.black,
-          //                 weight: 50,
-          //                 size: 35,
-          //               )),
-          //         ),
-          //       ),
-          //     )),
+          Expanded(flex:1,child: ListView(
+            children: [
+              // _sideDrawerItemWidget(context, AppStrings.oneDayStory),
+              _sideDrawerItemWidget(context, AppStrings.favourites, RouteUtils.favouriteView),
+              _sideDrawerItemWidget(context, AppStrings.bookmarks,RouteUtils.bookmarkView),
+              // _sideDrawerItemWidget(context, AppStrings.savedWords),
+              const Divider(
+                color: AppColors.black,
+              ),
+              // _sideDrawerItemWidget(context, 'Remainder',''),
+              // _sideDrawerItemWidget(context, AppStrings.settings,''),
+              _sideDrawerItemWidget(context, AppStrings.otherApps,''),
+              _sideDrawerItemWidget(context, AppStrings.rating,''),
+              _sideDrawerItemWidget(context, AppStrings.about,''),
+              _sideDrawerItemWidget(context, AppStrings.share,''),
+              // Expanded(
+              //     flex: 1,
+              //     child: SizedBox(
+              //       width: Get.width,
+              //       child: Align(
+              //         alignment: Alignment.bottomRight,
+              //         child: InkWell(
+              //           onTap: () => controller.scaffoldState.currentState?.openEndDrawer(),
+              //           radius: 45.0,
+              //           borderRadius: BorderRadius.circular(45.0),
+              //           child: Card(
+              //               shape: RoundedRectangleBorder(
+              //                 borderRadius: BorderRadius.circular(45.0),
+              //               ),
+              //               child: const Icon(
+              //                 Icons.navigate_before_rounded,
+              //                 color: AppColors.black,
+              //                 weight: 50,
+              //                 size: 35,
+              //               )),
+              //         ),
+              //       ),
+              //     )),
+            ],
+          ))
+
         ],
       ),
     );
@@ -125,15 +129,14 @@ class _MainViewState extends State<MainView> {
                 size: 25,
               )),
         ),
-        IconButton(
-            onPressed: () {
-              // Schedule the daily notification when the app starts
-              NotificationService().scheduleDailyNotification(title: "test",body: "this is a scheduled test message");
-            },
-            icon: const Icon(
-              Icons.notifications_none_rounded,
-              size: 25,
-            ))
+        // IconButton(
+        //     onPressed: () {
+        //       // Schedule the daily notification when the app starts
+        //     },
+        //     icon: const Icon(
+        //       Icons.notifications_none_rounded,
+        //       size: 25,
+        //     ))
       ],
     );
   }

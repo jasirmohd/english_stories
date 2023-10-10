@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:english_stories/service/local_db_service.dart';
 
 import '../model/story_db_model.dart';
@@ -61,9 +63,12 @@ class StoryRepository{
   Future addBookmarkFlag(StoryDBModel storyDBModel) async {
     List<StoryDBModel> list= await getAllStory();
     int index = list.indexWhere((element) => element.category == storyDBModel.category && element.title == storyDBModel.title);
+    log('db is favourite - ${storyDBModel.isFavourite}');
     if(index != -1) {
+      log('db update');
       await dbService.updateStoryListFromDB(index, storyDBModel);
     }else{
+      log('adding to db');
       await addToDB(storyDBModel);
     }
     return true;

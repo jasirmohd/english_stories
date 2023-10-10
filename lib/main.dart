@@ -8,9 +8,9 @@ import 'package:firebase_crashlytics/firebase_crashlytics.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:permission_handler/permission_handler.dart';
-import 'package:timezone/data/latest.dart' as tz;
 
 import 'firebase_options.dart';
 import 'model/story_db_model.dart';
@@ -29,10 +29,9 @@ void main() async {
     FirebaseCrashlytics.instance.recordError(error, stack, fatal: true);
     return true;
   };
+  // NotificationService().initFirebaseMessage();
+  MobileAds.instance.initialize();
   NotificationService().initNotification();
-  tz.initializeTimeZones();
-  // Schedule the daily notification when the app starts
-  NotificationService().scheduleDailyNotification(title: "test",body: "this is a scheduled test message");
   await Permission.notification.request();
   await initDB();
   await SharedPrefUtils().init();
