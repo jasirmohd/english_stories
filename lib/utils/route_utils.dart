@@ -6,7 +6,6 @@ import 'package:english_stories/view/remainder_view.dart';
 import 'package:english_stories/view/splash_view.dart';
 import 'package:english_stories/view/story_list_view.dart';
 import 'package:english_stories/view/story_view.dart';
-import 'package:english_stories/view/video_view.dart';
 import 'package:get/get.dart';
 
 class RouteUtils{
@@ -15,7 +14,6 @@ class RouteUtils{
   static const String mainView = '/main_view';
   static const String storyListView = '/story_list_view';
   static const String storyView = '/story_view';
-  static const String videoView = '/video_view';
   static const String favouriteView = '/favourite_view';
   static const String bookmarkView = '/bookmark_view';
   static const String otherAppsView = '/other_apps_view';
@@ -27,7 +25,6 @@ class RouteUtils{
     GetPage(name: mainView, page: () => const MainView()),
     GetPage(name: storyListView, page: () => const StoryListView()),
     GetPage(name: storyView, page: () => const StoryView()),
-    GetPage(name: videoView, page: () => const VideoView()),
     GetPage(name: favouriteView, page: () => const FavouriteView()),
     GetPage(name: bookmarkView, page: () => const BookMarkView()),
     GetPage(name: otherAppsView, page: () => const OtherAppsView()),

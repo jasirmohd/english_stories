@@ -1,5 +1,6 @@
 import 'package:english_stories/utils/route_utils.dart';
 import 'package:english_stories/view/books_list_view.dart';
+import 'package:english_stories/view/random_story_view.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,8 +8,6 @@ import '../resources/app_colors.dart';
 import '../resources/app_strings.dart';
 import '../service/notification_service.dart';
 import '../view/home_view.dart';
-import '../view/video_list_view.dart';
-import '../widgets/common_text_widget.dart';
 
 import '../controller/main_controller.dart';
 
@@ -142,7 +141,7 @@ class _MainViewState extends State<MainView> {
   Widget _contentWidget(BuildContext context, MainController controller) {
     return IndexedStack(
       index: controller.currentIndex,
-      children: const [HomeView(), VideoListView(), BooksListView()],
+      children: const [HomeView(), RandomStoryView(), BooksListView()],
     );
   }
 

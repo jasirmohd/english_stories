@@ -22,12 +22,14 @@ class StoryListController extends GetxController {
   @override
   void onInit() {
     category.value = arguments['category'];
-    getStory();
+    loadFavourite();
     super.onInit();
   }
 
-  loadFavourite() async {
-    favouriteStoryList.value = await _repo.getAllStory();
+  Future loadFavourite() async {
+    favouriteStoryList.value = await _repo.getAllFavouriteStory();
+    await getStory();
+    log('favourite length - ${favouriteStoryList.length}');
   }
 
   Future getStory() async {
@@ -42,20 +44,22 @@ class StoryListController extends GetxController {
       for (int i = 0; i < favouriteStoryList.length; i++) {
         int index = stringList.indexWhere((element) =>
             element.category == favouriteStoryList[i].category &&
-            element.title == favouriteStoryList[i].title);
+            element.title == favouriteStoryList[i].title && favouriteStoryList[i].isFavourite!);
+        log('index - $index');
         if (index != -1) {
-          stringList.update(
-              index,
-              StoryData(
-                  category: stringList[index].category,
-                  title: stringList[index].title,
-                  body: stringList[index].body,
-                  isFavourite: stringList[index].isFavourite,
-                  isBookmarked: stringList[index].isBookmarked));
+          log('index - ${stringList[index].isFavourite}');
+          stringList.removeAt(index);
+          stringList.insert(index, StoryData(
+              category: stringList[index].category,
+              title: stringList[index].title,
+              body: stringList[index].body,
+              isFavourite: stringList[index].isFavourite,
+              isBookmarked: stringList[index].isBookmarked));
         }
       }
+      log('length - ${stringList.length}');
       storyList.addAll(stringList);
-      update();
+      storyList.refresh();
     }
   }
 

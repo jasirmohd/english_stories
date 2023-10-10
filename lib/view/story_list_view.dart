@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:english_stories/controller/story_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -48,6 +50,7 @@ class _StoryListViewState extends State<StoryListView> {
 
   Widget _itemWidget(
       BuildContext context, int index, StoryListController controller) {
+    log('favourite - ${controller.storyList[index].isFavourite}');
     return InkWell(
       onTap: () => controller.onItemTap(index),
       child: Card(
