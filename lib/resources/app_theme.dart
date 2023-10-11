@@ -20,6 +20,7 @@ class AppTheme {
         borderRadius: BorderRadius.only(topRight: Radius.circular(15.0),bottomRight: Radius.circular(15.0))
       )
     ),
+      dividerColor: Colors.black,
     colorScheme: ColorScheme.light(
         background: Colors.grey[300]!,
         primary: Colors.grey[200]!,
@@ -61,6 +62,7 @@ class AppTheme {
               borderRadius: BorderRadius.only(topRight: Radius.circular(15.0),bottomRight: Radius.circular(15.0))
           )
       ),
+      dividerColor: Colors.white,
       colorScheme: ColorScheme.dark(
           background: Colors.black,
           primary: Colors.grey[900]!,
@@ -73,6 +75,8 @@ class AppTheme {
         showUnselectedLabels: false,
       ),
       textTheme: const TextTheme(
+        headlineMedium: TextStyle(
+            color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           titleMedium: TextStyle(
               color: Colors.white, fontSize: 20, fontWeight: FontWeight.bold),
           titleSmall: TextStyle(

@@ -5,6 +5,7 @@ import 'package:english_stories/model/books_response_model.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 
 class BookListController extends GetxController{
@@ -64,6 +65,13 @@ class BookListController extends GetxController{
           cornerRadius: 10.0,
         ))
       ..load();
+  }
+
+  Future<void> onBuyNowTap(int index) async {
+    Uri url = Uri.parse(bookList[index].productUrl);
+    if (!await launchUrl(url)) {
+      throw Exception('Could not launch $url');
+    }
   }
 
   @override

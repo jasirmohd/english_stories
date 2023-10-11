@@ -5,15 +5,17 @@ import 'package:get/get.dart';
 import '../controller/random_story_controller.dart';
 
 class RandomStoryView extends StatelessWidget {
-  const RandomStoryView({super.key});
+  const RandomStoryView({super.key, required this.theme});
+
+  final bool theme;
 
   @override
   Widget build(BuildContext context) {
     return GetBuilder<RandomStoryController>(
       init: RandomStoryController(),
       builder: (controller) => SizedBox(
-        width: Get.width,
-        height: Get.height,
+        width: MediaQuery.sizeOf(context).width,
+        height: MediaQuery.sizeOf(context).height,
         child: ListView(
           children: [
             Obx(() => Visibility(
@@ -33,7 +35,7 @@ class RandomStoryView extends StatelessWidget {
       child: Card(
         child: SizedBox(
           height: 200,
-          width: Get.width,
+          width: MediaQuery.sizeOf(context).width,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Column(
@@ -42,7 +44,7 @@ class RandomStoryView extends StatelessWidget {
                     flex: 1,
                     child: Container(
                       height: 160,
-                      width: Get.width,
+                      width: MediaQuery.sizeOf(context).width,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
                         color: Colors.black,

@@ -1,10 +1,15 @@
+import 'dart:developer';
+
 import 'package:english_stories/controller/home_controller.dart';
+import 'package:english_stories/utils/shared_pref_utils.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key, required this.theme});
+
+  final bool theme;
 
   @override
   State<HomeView> createState() => _HomeViewState();
@@ -16,8 +21,8 @@ class _HomeViewState extends State<HomeView> {
     return GetBuilder<HomeController>(
       init: HomeController(),
       builder: (controller) => SizedBox(
-        width: Get.width,
-        height: Get.height,
+        width: MediaQuery.sizeOf(context).width,
+        height: MediaQuery.sizeOf(context).height,
         child: ListView(
           children: [
             // _adContentWidget(context, controller),
@@ -50,7 +55,7 @@ class _HomeViewState extends State<HomeView> {
       onTap: () => controller.onItemTap(index),
       child: Card(
         child: SizedBox(
-          width: Get.width,
+          width: MediaQuery.sizeOf(context).width,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(

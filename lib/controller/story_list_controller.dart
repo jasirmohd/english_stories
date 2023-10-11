@@ -66,7 +66,7 @@ class StoryListController extends GetxController {
                   category: stringList[index].category,
                   title: stringList[index].title,
                   body: stringList[index].body,
-                  isFavourite: stringList[index].isFavourite,
+                  isFavourite: true,
                   isBookmarked: stringList[index].isBookmarked));
           stringList.removeAt(index+1);
         }

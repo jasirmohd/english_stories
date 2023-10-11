@@ -13,8 +13,8 @@ class SplashView extends StatelessWidget {
       init: SplashController(),
       builder:(controller) => Scaffold(
         body: SizedBox(
-          width: Get.width,
-          height: Get.height,
+          width: MediaQuery.sizeOf(context).width,
+          height: MediaQuery.sizeOf(context).height,
           child: const Column(
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,

@@ -22,14 +22,17 @@ class _MainViewState extends State<MainView> {
   Widget build(BuildContext context) {
     return GetBuilder<MainController>(
         init: MainController(),
-        builder: (controller) => Scaffold(
-              backgroundColor: Theme.of(context).colorScheme.background,
-              key: controller.scaffoldState,
-              drawer: _sideDrawerWidget(context, controller),
-              appBar: _appBarWidget(context, controller),
-              body: _contentWidget(context, controller),
-              bottomNavigationBar: _bottomNavBarWidget(context, controller),
-            ));
+        builder: (controller) => WillPopScope(
+          onWillPop: () => controller.onBackPressed(),
+          child: Scaffold(
+                backgroundColor: Theme.of(context).colorScheme.background,
+                key: controller.scaffoldState,
+                drawer: _sideDrawerWidget(context, controller),
+                appBar: _appBarWidget(context, controller),
+                body: _contentWidget(context, controller),
+                bottomNavigationBar: _bottomNavBarWidget(context, controller),
+              ),
+        ));
   }
 
   Widget _sideDrawerWidget(BuildContext context, MainController controller) {
@@ -40,7 +43,7 @@ class _MainViewState extends State<MainView> {
               flex: 0,
               child: Container(
                 height: 150,
-                width: Get.width,
+                width: MediaQuery.sizeOf(context).width,
                 color: Colors.black,
               )),
           Expanded(flex:1,child: ListView(
@@ -49,9 +52,7 @@ class _MainViewState extends State<MainView> {
               _sideDrawerItemWidget(context, AppStrings.favourites, RouteUtils.favouriteView),
               _sideDrawerItemWidget(context, AppStrings.bookmarks,RouteUtils.bookmarkView),
               // _sideDrawerItemWidget(context, AppStrings.savedWords),
-              const Divider(
-                color: AppColors.black,
-              ),
+              Divider(color: Theme.of(context).dividerColor,),
               // _sideDrawerItemWidget(context, 'Remainder',''),
               // _sideDrawerItemWidget(context, AppStrings.settings,''),
               _sideDrawerItemWidget(context, AppStrings.otherApps,''),
@@ -94,7 +95,7 @@ class _MainViewState extends State<MainView> {
       onTap: () => Get.toNamed(route),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 3.0),
-        width: Get.width,
+        width: MediaQuery.sizeOf(context).width,
         height: 50,
         alignment: Alignment.center,
         child: Text(
@@ -144,7 +145,7 @@ class _MainViewState extends State<MainView> {
   Widget _contentWidget(BuildContext context, MainController controller) {
     return IndexedStack(
       index: controller.currentIndex,
-      children: const [HomeView(), RandomStoryView(), BooksListView()],
+      children:  [Obx(() => HomeView(theme:controller.isLight.value)), Obx(() =>RandomStoryView(theme:controller.isLight.value)), Obx(() =>BooksListView(theme:controller.isLight.value))],
     );
   }
 

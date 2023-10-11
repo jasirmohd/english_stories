@@ -62,7 +62,7 @@ class _FavouriteViewState extends State<FavouriteView> {
       BuildContext context, int index, FavouriteController controller) {
     return Card(
       child: SizedBox(
-        width: Get.width,
+        width: MediaQuery.sizeOf(context).width,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(

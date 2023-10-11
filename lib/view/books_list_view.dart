@@ -7,7 +7,9 @@ import 'package:get/get.dart';
 import '../widgets/common_native_ads_widget.dart';
 
 class BooksListView extends StatelessWidget {
-  const BooksListView({super.key});
+  const BooksListView({super.key, required this.theme});
+
+  final bool theme;
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +40,7 @@ class BooksListView extends StatelessWidget {
     return Card(
       child: SizedBox(
         // height: 200,
-        width: Get.width,
+        width: MediaQuery.sizeOf(context).width,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(
@@ -84,7 +86,14 @@ class BooksListView extends StatelessWidget {
                         onRatingUpdate: (rating) {
                           print(rating);
                         },
-                      )
+                      ),
+                      OutlinedButton(onPressed: () async => await controller.onBuyNowTap(index), child: Text('Buy Now', style: Theme.of(context).textTheme.titleSmall,), style: OutlinedButton.styleFrom(
+                        side: BorderSide(
+                          width: 2.0,
+                          color: Theme.of(context).textTheme.titleMedium!.color!,
+                          style: BorderStyle.solid,
+                        ),
+                      ),)
                     ],
                   ))
             ],

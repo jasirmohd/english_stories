@@ -207,7 +207,7 @@ class StoryController extends GetxController {
   }
 
   onShareTap() {
-    Share.share('${title.value}\n${body.value}');
+    Share.share('${title.value}:\n\n${body.value}');
   }
 
   @override

@@ -36,7 +36,7 @@ class FavouriteController extends GetxController {
 
   loadFavouriteStories() async {
     List<StoryDBModel> dataList = await _repo.getAllFavouriteStory();
-    favouriteList.addAll(dataList.distinct((e) => e.category!));
+    favouriteList.addAll(dataList.distinct((e) => e.title!));
     favouriteList.refresh();
     if (favouriteList.isEmpty) {
       noData.value = 'No Favourite stories';
