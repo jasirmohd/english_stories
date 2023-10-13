@@ -38,7 +38,7 @@ class BooksListView extends StatelessWidget {
     return Card(
       child: SizedBox(
         // height: 200,
-        width: Get.width,
+        width: MediaQuery.sizeOf(context).width,
         child: Padding(
           padding: const EdgeInsets.all(10.0),
           child: Row(

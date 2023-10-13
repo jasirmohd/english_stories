@@ -59,7 +59,7 @@ class _StoryListViewState extends State<StoryListView> {
       onTap: () => controller.onItemTap(index),
       child: Card(
         child: SizedBox(
-          width: Get.width,
+          width: MediaQuery.sizeOf(context).width,
           child: Padding(
             padding: const EdgeInsets.all(10.0),
             child: Row(

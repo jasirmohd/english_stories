@@ -64,8 +64,8 @@ class StoryView extends StatelessWidget {
           flex: 1,
           child: Card(
             child: SizedBox(
-                width: Get.width,
-                height: Get.height,
+                width: MediaQuery.sizeOf(context).width,
+                height: MediaQuery.sizeOf(context).height,
                 child: SingleChildScrollView(
                     child: Padding(
                   padding: const EdgeInsets.all(10.0),

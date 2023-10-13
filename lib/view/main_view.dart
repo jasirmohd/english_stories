@@ -40,7 +40,7 @@ class _MainViewState extends State<MainView> {
               flex: 0,
               child: Container(
                 height: 150,
-                width: Get.width,
+                width: MediaQuery.sizeOf(context).width,
                 color: Colors.black,
               )),
           Expanded(flex:1,child: ListView(
@@ -94,7 +94,7 @@ class _MainViewState extends State<MainView> {
       onTap: () => Get.toNamed(route),
       child: Container(
         margin: const EdgeInsets.symmetric(vertical: 3.0),
-        width: Get.width,
+        width: MediaQuery.sizeOf(context).width,
         height: 50,
         alignment: Alignment.center,
         child: Text(
@@ -160,17 +160,17 @@ class _MainViewState extends State<MainView> {
               icon: Icon(
                 Icons.home_filled,
               ),
-              label: 'Stories'),
+              label: ''),
           BottomNavigationBarItem(
               icon: Icon(
-                Icons.video_library_rounded,
+                Icons.dock_rounded,
               ),
-              label: 'Videos'),
+              label: ''),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.menu_book_rounded,
               ),
-              label: 'Books'),
+              label: ''),
         ]);
   }
 }

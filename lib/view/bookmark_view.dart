@@ -62,7 +62,7 @@ class _BookMarkViewState extends State<BookMarkView> {
     return Card(
       margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 5.0),
       child: SizedBox(
-        width: Get.width,
+        width: MediaQuery.sizeOf(context).width,
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Row(

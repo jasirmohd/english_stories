@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class RemainderView extends StatelessWidget {
-  const RemainderView({super.key});
+class DictionarySearchView extends StatelessWidget {
+  const DictionarySearchView({super.key});
 
   @override
   Widget build(BuildContext context) {
