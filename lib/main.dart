@@ -72,6 +72,9 @@ class MyApp extends StatelessWidget {
     return GetMaterialApp(
       title: 'English Stories',
       debugShowCheckedModeBanner: false,
+      useInheritedMediaQuery: true,
+      locale: DevicePreview.locale(context),
+      builder: DevicePreview.appBuilder,
       theme: AppTheme.lightTheme,
       darkTheme: AppTheme.darkTheme,
       themeMode: ThemeMode.system,

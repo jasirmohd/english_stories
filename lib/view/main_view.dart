@@ -161,17 +161,17 @@ class _MainViewState extends State<MainView> {
               icon: Icon(
                 Icons.home_filled,
               ),
-              label: 'Stories'),
+              label: ''),
           BottomNavigationBarItem(
               icon: Icon(
-                Icons.video_library_rounded,
+                Icons.dock_rounded,
               ),
-              label: 'Videos'),
+              label: ''),
           BottomNavigationBarItem(
               icon: Icon(
                 Icons.menu_book_rounded,
               ),
-              label: 'Books'),
+              label: ''),
         ]);
   }
 }
