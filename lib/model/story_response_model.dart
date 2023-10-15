@@ -1,53 +1,32 @@
-import 'dart:convert';
+import 'package:cloud_firestore/cloud_firestore.dart';
 
-StoryModel storyModelFromJson(String str) => StoryModel.fromJson(json.decode(str));
+class StoryResponseModel {
+  final String? id;
+  final String title;
+  final String category;
+  final String body;
+  final String imageUrl;
+  final String storyImageUrl;
 
-String storyModelToJson(StoryModel data) => json.encode(data.toJson());
-
-class StoryModel {
-  List<StoryData> data;
-
-  StoryModel({
-    required this.data,
-  });
-
-  factory StoryModel.fromJson(Map<String, dynamic> json) => StoryModel(
-    data: List<StoryData>.from(json["data"].map((x) => StoryData.fromJson(x))),
-  );
-
-  Map<String, dynamic> toJson() => {
-    "data": List<dynamic>.from(data.map((x) => x.toJson())),
-  };
-}
-
-class StoryData {
-  String category;
-  String title;
-  String body;
-  bool isFavourite;
-  bool isBookmarked;
-
-  StoryData({
-    required this.category,
+  StoryResponseModel({
+    this.id,
     required this.title,
+    required this.category,
     required this.body,
-    required this.isFavourite,
-    required this.isBookmarked
+    required this.imageUrl,
+    required this.storyImageUrl,
   });
 
-  factory StoryData.fromJson(Map<String, dynamic> json) => StoryData(
-    category: json["category"],
-    title: json["title"],
-    body: json["body"],
-    isFavourite: json["is_favourite"] ,
-    isBookmarked: json["is_bookmarked"],
-  );
-
-  Map<String, dynamic> toJson() => {
-    "category": category,
-    "title": title,
-    "body": body,
-    "is_favourite":isFavourite,
-    "is_bookmarked":isBookmarked
-  };
+  factory StoryResponseModel.fromSnapshot(
+      DocumentSnapshot<Map<String, dynamic>> doc) {
+    final data = doc.data()!;
+    return StoryResponseModel(
+        id: doc.id,
+        title: data['title'],
+        category: data['category'],
+        body: data['body'],
+        imageUrl: data['image_url'],
+        storyImageUrl: data['story_image_url']
+    );
+  }
 }

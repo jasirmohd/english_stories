@@ -16,10 +16,7 @@ class StoryController extends GetxController {
 
   final _repo = StoryRepository();
 
-  final category = RxString('');
-  final title = RxString('');
-  final body = RxString('');
-  final image = RxString('');
+  final storyDataList = RxList<StoryDBModel>([]);
 
   final textSize = RxDouble(16.0);
 
@@ -27,6 +24,7 @@ class StoryController extends GetxController {
 
   final isBookmarked = RxBool(false);
   final isFavourite = RxBool(false);
+  final isUnRead = RxBool(false);
 
   final FlutterTts _flutterTts = FlutterTts();
 
@@ -51,15 +49,13 @@ class StoryController extends GetxController {
 
   @override
   void onInit() {
-    category.value = arguments['category'];
-    title.value = arguments['title'];
-    body.value = arguments['body'];
-    image.value = arguments['image'];
+    storyDataList.value = arguments['list'];
     update();
     loadVideoAd();
     loadAd();
     initFlutterTTS();
     loadBookmarked();
+    addStoryToRead();
     super.onInit();
   }
 
@@ -152,28 +148,46 @@ class StoryController extends GetxController {
 
   loadBookmarked() async {
     isBookmarked.value =
-        await _repo.getBookmarkFlag(title.value, category.value);
+        await _repo.getBookmarkFlag(storyDataList[0].title!, storyDataList[0].category!);
     isFavourite.value =
-        await _repo.getFavouriteFlag(title.value, category.value);
+        await _repo.getFavouriteFlag(storyDataList[0].title!, storyDataList[0].category!);
+  }
+
+  addStoryToRead() async {
+    await _repo.addReadFlag(StoryDBModel(
+        category: storyDataList[0].category,
+        title: storyDataList[0].title,
+        body: storyDataList[0].body,
+        isFavourite: isFavourite.value,
+        isBookmarked: storyDataList[0].isBookmarked,
+        isUnRead: true,
+        imageUrl: storyDataList[0].imageUrl,
+        storyImageUrl: storyDataList[0].storyImageUrl));
   }
 
   onBookmarkTap() {
     if (isBookmarked.value) {
       isBookmarked.value = false;
       _repo.removeBookmarkFlag(StoryDBModel(
-          category: category.value,
-          title: title.value,
-          body: body.value,
+          category: storyDataList[0].category,
+          title: storyDataList[0].title,
+          body: storyDataList[0].body,
           isFavourite: isFavourite.value,
-          isBookmarked: false));
+          isBookmarked: false,
+          isUnRead: storyDataList[0].isUnRead,
+          imageUrl: storyDataList[0].imageUrl,
+          storyImageUrl: storyDataList[0].storyImageUrl));
     } else {
       isBookmarked.value = true;
       _repo.addBookmarkFlag(StoryDBModel(
-          category: category.value,
-          title: title.value,
-          body: body.value,
+          category: storyDataList[0].category,
+          title: storyDataList[0].title,
+          body: storyDataList[0].body,
           isFavourite: isFavourite.value,
-          isBookmarked: true));
+          isBookmarked: true,
+          isUnRead: storyDataList[0].isUnRead,
+          imageUrl: storyDataList[0].imageUrl,
+          storyImageUrl: storyDataList[0].storyImageUrl));
     }
   }
 
@@ -192,7 +206,7 @@ class StoryController extends GetxController {
   onAudioPlayTap() async {
     setTtsLanguage();
     if (!isAudioPlaying.value) {
-      var result = await _flutterTts.speak(body.value);
+      var result = await _flutterTts.speak(storyDataList[0].body!);
       if (result == 1) {
         isAudioPlaying.value = true;
         log('is playing');
@@ -207,7 +221,7 @@ class StoryController extends GetxController {
   }
 
   onShareTap() {
-    Share.share('${title.value}:\n\n${body.value}');
+    Share.share('${storyDataList[0].title!}:\n\n${storyDataList[0].body!}');
   }
 
   @override

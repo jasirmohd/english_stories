@@ -36,7 +36,7 @@ class StoryView extends StatelessWidget {
           icon: const Icon(
             Icons.arrow_back,
           )),
-      title: Text(controller.category.value,
+      title: Text(controller.storyDataList[0].category!,
           style: Theme.of(context).textTheme.titleMedium),
       centerTitle: true,
       actions: [
@@ -58,7 +58,7 @@ class StoryView extends StatelessWidget {
       children: [
         Expanded(
             flex: 0,
-            child: Text(controller.title.value,
+            child: Text(controller.storyDataList[0].title!,
                 style: Theme.of(context).textTheme.titleSmall)),
         Expanded(
           flex: 1,
@@ -71,7 +71,7 @@ class StoryView extends StatelessWidget {
                   padding: const EdgeInsets.all(10.0),
                   child: Obx(
                     () => Text(
-                      controller.body.value,
+                      controller.storyDataList[0].body!,
                       style: TextStyle(
                         fontSize: controller.textSize.value,
                         color: Theme.of(context).textTheme.titleSmall!.color,

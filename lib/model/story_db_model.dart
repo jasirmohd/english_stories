@@ -4,7 +4,7 @@ part 'story_db_model.g.dart';
 
 @HiveType(typeId: 1)
 class StoryDBModel {
-  StoryDBModel({this.id,this.category,this.title, this.body,this.isFavourite, this.isBookmarked});
+  StoryDBModel({this.id,this.category,this.title, this.body,this.isFavourite, this.isBookmarked, this.isUnRead, this.imageUrl, this.storyImageUrl});
 
   @HiveField(0)
   int? id;
@@ -23,4 +23,13 @@ class StoryDBModel {
 
   @HiveField(5)
   bool? isBookmarked;
+
+  @HiveField(6)
+  bool? isUnRead;
+
+  @HiveField(7)
+  String? imageUrl;
+
+  @HiveField(8)
+  String? storyImageUrl;
 }

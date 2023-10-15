@@ -29,6 +29,12 @@ class StoryRepository{
     return bookmarkList;
   }
 
+  Future getAllReadStory() async {
+    List<StoryDBModel> list = await dbService.getDBStory();
+    List<StoryDBModel> readList = list.where((element) => !element.isUnRead!).toList();
+    return readList;
+  }
+
   Future getFavouriteFlag(String title, String category) async {
     List<StoryDBModel> list = await dbService.getDBStory();
     List<StoryDBModel> dataList = list.where((element) => element.category == category && element.title == title && element.isFavourite!).toList();
@@ -63,12 +69,20 @@ class StoryRepository{
   Future addBookmarkFlag(StoryDBModel storyDBModel) async {
     List<StoryDBModel> list= await getAllStory();
     int index = list.indexWhere((element) => element.category == storyDBModel.category && element.title == storyDBModel.title);
-    log('db is favourite - ${storyDBModel.isFavourite}');
     if(index != -1) {
-      log('db update');
       await dbService.updateStoryListFromDB(index, storyDBModel);
     }else{
-      log('adding to db');
+      await addToDB(storyDBModel);
+    }
+    return true;
+  }
+
+  Future addReadFlag(StoryDBModel storyDBModel) async {
+    List<StoryDBModel> list= await getAllStory();
+    int index = list.indexWhere((element) => element.category == storyDBModel.category && element.title == storyDBModel.title);
+    if(index != -1) {
+      await dbService.updateStoryListFromDB(index, storyDBModel);
+    }else{
       await addToDB(storyDBModel);
     }
     return true;

@@ -2,10 +2,8 @@ import 'dart:developer';
 import 'dart:io';
 
 import 'package:english_stories/model/story_db_model.dart';
-import 'package:english_stories/model/story_response_model.dart';
 import 'package:english_stories/repository/story_repository.dart';
 import 'package:english_stories/utils/route_utils.dart';
-import 'package:english_stories/utils/story_config.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
@@ -19,7 +17,7 @@ class StoryListController extends GetxController {
 
   final category = ''.obs;
 
-  final storyList = RxList<StoryData>([]);
+  final storyList = RxList<StoryDBModel>([]);
   final favouriteStoryList = RxList<StoryDBModel>([]);
 
   BannerAd? bannerAd;
@@ -35,6 +33,7 @@ class StoryListController extends GetxController {
   @override
   void onInit() {
     category.value = arguments['category'];
+    storyList.value = arguments['story_list'];
     loadFavourite();
     loadAd();
     super.onInit();
@@ -42,38 +41,6 @@ class StoryListController extends GetxController {
 
   loadFavourite() async {
     favouriteStoryList.value = await _repo.getAllFavouriteStory();
-    await getStory();
-  }
-
-  Future getStory() async {
-    String storyCategoryJson = await StoryConfig().getStoryList(category.value);
-    StoryModel storyModel = storyModelFromJson(storyCategoryJson);
-    List<StoryData> stringList = storyModel.data;
-    if (stringList.isNotEmpty) {
-      log('length - ${stringList.length}');
-      if (storyList.isNotEmpty) {
-        storyList.clear();
-      }
-      for (int i = 0; i < favouriteStoryList.length; i++) {
-        int index = stringList.indexWhere((element) =>
-            element.category == favouriteStoryList[i].category &&
-            element.title == favouriteStoryList[i].title && favouriteStoryList[i].isFavourite!);
-        if (index != -1) {
-          log('is favourite - ${stringList[index].title} ${stringList[index].isFavourite}');
-          stringList.insert(
-              index,
-              StoryData(
-                  category: stringList[index].category,
-                  title: stringList[index].title,
-                  body: stringList[index].body,
-                  isFavourite: true,
-                  isBookmarked: stringList[index].isBookmarked));
-          stringList.removeAt(index+1);
-        }
-      }
-      storyList.addAll(stringList);
-      storyList.refresh();
-    }
   }
 
   onItemTap(int index) {
@@ -87,40 +54,34 @@ class StoryListController extends GetxController {
   }
 
   onFavouriteTap(int index) async {
-    if (storyList[index].isFavourite) {
+    if (storyList[index].isFavourite!) {
       log('is not favourite - ${storyList[index].title} ${storyList[index].isFavourite}');
-      await _repo.removeFavouriteFlag(StoryDBModel(
-          category: storyList[index].category,
-          title: storyList[index].title,
-          body: storyList[index].body,
-          isFavourite: false,
-          isBookmarked: storyList[index].isBookmarked));
-      storyList.insert(
-          index,
-          StoryData(
-              category: storyList[index].category,
-              title: storyList[index].title,
-              body: storyList[index].body,
-              isFavourite: false,
-              isBookmarked: storyList[index].isBookmarked));
+      StoryDBModel storyDBModel = StoryDBModel(
+        category: storyList[index].category,
+        title: storyList[index].title,
+        body: storyList[index].body,
+        isFavourite: false,
+        isBookmarked: storyList[index].isBookmarked,
+        isUnRead: storyList[index].isUnRead,
+        imageUrl: storyList[index].imageUrl,
+        storyImageUrl: storyList[index].storyImageUrl,);
+      await _repo.removeFavouriteFlag(storyDBModel);
+      storyList.insert(index,storyDBModel);
       storyList.removeAt(index+1);
       storyList.refresh();
     } else {
       log('is favourite - ${storyList[index].title} ${storyList[index].isFavourite}');
-      await _repo.addFavouriteFlag(StoryDBModel(
-          category: storyList[index].category,
-          title: storyList[index].title,
-          body: storyList[index].body,
-          isFavourite: true,
-          isBookmarked: storyList[index].isBookmarked));
-      storyList.insert(
-          index,
-          StoryData(
-              category: storyList[index].category,
-              title: storyList[index].title,
-              body: storyList[index].body,
-              isFavourite: true,
-              isBookmarked: storyList[index].isBookmarked));
+      StoryDBModel storyDBModel = StoryDBModel(
+        category: storyList[index].category,
+        title: storyList[index].title,
+        body: storyList[index].body,
+        isFavourite: true,
+        isBookmarked: storyList[index].isBookmarked,
+        isUnRead: storyList[index].isUnRead,
+        imageUrl: storyList[index].imageUrl,
+        storyImageUrl: storyList[index].storyImageUrl,);
+      await _repo.addFavouriteFlag(storyDBModel);
+      storyList.insert(index, storyDBModel);
       storyList.removeAt(index+1);
       storyList.refresh();
     }

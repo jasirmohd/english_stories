@@ -18,19 +18,18 @@ class LocalDBService{
     return list;
   }
 
-  Future deleteStoryFromDB(String title, String category) async {
-    Box<StoryDBModel> box = Hive.box<StoryDBModel>('story_box');
-    List<StoryDBModel> list = box.values.toList();
-    int index = list.indexWhere((element) => element.title == title && element.category == category);
-    if(index != -1){
-      box.deleteAt(index);
-    }
-  }
+  // Future deleteStoryFromDB(String title, String category) async {
+  //   Box<StoryDBModel> box = Hive.box<StoryDBModel>('story_box');
+  //   List<StoryDBModel> list = box.values.toList();
+  //   int index = list.indexWhere((element) => element.title == title && element.category == category);
+  //   if(index != -1){
+  //     box.deleteAt(index);
+  //   }
+  // }
 
   Future updateStoryListFromDB(int index, StoryDBModel storyDBModel) async {
     Box<StoryDBModel> box = Hive.box<StoryDBModel>('story_box');
     await box.putAt(index, storyDBModel);
     StoryDBModel? model =  box.getAt(index);
-    log('data - ${model!.title}, ${model!.isFavourite ?? 0}');
   }
 }

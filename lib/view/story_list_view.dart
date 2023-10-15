@@ -1,5 +1,3 @@
-import 'dart:developer';
-
 import 'package:english_stories/controller/story_list_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -39,7 +37,10 @@ class _StoryListViewState extends State<StoryListView> {
           icon: const Icon(
             Icons.arrow_back,
           )),
-      title: Text(controller.category.value,style: Theme.of(context).textTheme.titleMedium,),
+      title: Text(
+        controller.category.value,
+        style: Theme.of(context).textTheme.titleMedium,
+      ),
       centerTitle: true,
     );
   }
@@ -57,7 +58,6 @@ class _StoryListViewState extends State<StoryListView> {
 
   Widget _itemWidget(
       BuildContext context, int index, StoryListController controller) {
-    log('favourite - ${controller.storyList[index].isFavourite}');
     return InkWell(
       onTap: () => controller.onItemTap(index),
       child: Card(
@@ -69,15 +69,20 @@ class _StoryListViewState extends State<StoryListView> {
               children: [
                 Expanded(
                     flex: 1,
-                    child: Text(controller.storyList[index].title, style: Theme.of(context).textTheme.titleSmall,)),
+                    child: Text(
+                      controller.storyList[index].title!,
+                      style: Theme.of(context).textTheme.titleSmall,
+                    )),
                 Expanded(
                     flex: 0,
                     child: Obx(
-                        () => IconButton(
+                      () => IconButton(
                           onPressed: () => controller.onFavouriteTap(index),
-                          icon: Icon( controller.storyList[index].isFavourite ? Icons.favorite_rounded
-                            : Icons.favorite_border_rounded,
-                            color:  Colors.redAccent,
+                          icon: Icon(
+                            controller.storyList[index].isFavourite!
+                                ? Icons.favorite_rounded
+                                : Icons.favorite_border_rounded,
+                            color: Colors.redAccent,
                           )),
                     )),
               ],
@@ -91,12 +96,12 @@ class _StoryListViewState extends State<StoryListView> {
   Widget _bannerAdsWidget(
       BuildContext context, StoryListController controller) {
     return Obx(
-          () => controller.isLoaded.value
+      () => controller.isLoaded.value
           ? CommonBannerAdsWidget(
-        width: controller.adSize.width,
-        height: controller.adSize.height,
-        bannerAd: controller.bannerAd!,
-      )
+              width: controller.adSize.width,
+              height: controller.adSize.height,
+              bannerAd: controller.bannerAd!,
+            )
           : const SizedBox(),
     );
   }

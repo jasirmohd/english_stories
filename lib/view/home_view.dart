@@ -67,7 +67,7 @@ class _HomeViewState extends State<HomeView> {
                       width: 70,
                       decoration: BoxDecoration(
                         borderRadius: BorderRadius.circular(5.0),
-                        image: DecorationImage(image: AssetImage(controller.storyCategoryList[index].image))
+                        image: DecorationImage(image: AssetImage(controller.storyCategoryList[index]))
                       ),
                     )),
                 const SizedBox(
@@ -76,7 +76,7 @@ class _HomeViewState extends State<HomeView> {
                 Expanded(
                     flex: 1,
                     child: Text(
-                      controller.storyCategoryList[index].category,
+                      controller.storyCategoryList[index],
                       style: Theme.of(context).textTheme.titleMedium,
                     ))
               ],

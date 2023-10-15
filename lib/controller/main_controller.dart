@@ -3,9 +3,9 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_mobile_ads/google_mobile_ads.dart';
+import 'package:intl/intl.dart';
 
 import '../utils/shared_pref_utils.dart';
-import '../widgets/common_native_ads_widget.dart';
 
 class MainController extends GetxController{
   static MainController get to => Get.put(MainController());
@@ -66,17 +66,17 @@ class MainController extends GetxController{
             ),
           ),
           actions: <Widget>[
-            ElevatedButton(onPressed: () => Get.back(), child: Text('Cancel', style: Theme.of(context).textTheme.titleSmall,), style: ElevatedButton.styleFrom(
+            ElevatedButton(onPressed: () => Get.back(), style: ElevatedButton.styleFrom(
               backgroundColor: Colors.red
-            ),),
+            ), child: Text('Cancel', style: Theme.of(context).textTheme.titleSmall,),),
             ElevatedButton(
-              child: const Text('OK'),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green
               ),
               onPressed: () {
                 Navigator.of(context).pop(); //dismiss the color picker
               },
+              child: const Text('OK'),
             ),
           ],
         );

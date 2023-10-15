@@ -24,11 +24,11 @@ class SharedPrefUtils{
 
   bool getThemeStatus() => _prefs?.getBool(keyTheme) ?? false;
 
-  set saveDate(bool? value)  {
-    _prefs?.setBool(keyDate, value ?? false);
+  set saveDate(String? value)  {
+    _prefs?.setString(keyDate, value ?? '');
   }
 
-  bool getDate() => _prefs?.getBool(keyDate) ?? false;
+  String getDate() => _prefs?.getString(keyDate) ?? '';
 
   set saveFontSize(double? value)  {
     _prefs?.setDouble(keyBodyFontSize, value ?? 14.0);

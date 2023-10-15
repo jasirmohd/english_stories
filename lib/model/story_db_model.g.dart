@@ -23,13 +23,16 @@ class StoryDBModelAdapter extends TypeAdapter<StoryDBModel> {
       body: fields[3] as String?,
       isFavourite: fields[4] as bool?,
       isBookmarked: fields[5] as bool?,
-    );
+    )
+      ..isUnRead = fields[6] as bool?
+      ..imageUrl = fields[7] as String?
+      ..storyImageUrl = fields[8] as String?;
   }
 
   @override
   void write(BinaryWriter writer, StoryDBModel obj) {
     writer
-      ..writeByte(6)
+      ..writeByte(9)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +44,13 @@ class StoryDBModelAdapter extends TypeAdapter<StoryDBModel> {
       ..writeByte(4)
       ..write(obj.isFavourite)
       ..writeByte(5)
-      ..write(obj.isBookmarked);
+      ..write(obj.isBookmarked)
+      ..writeByte(6)
+      ..write(obj.isUnRead)
+      ..writeByte(7)
+      ..write(obj.imageUrl)
+      ..writeByte(8)
+      ..write(obj.storyImageUrl);
   }
 
   @override
